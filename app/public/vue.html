@@ -51,108 +51,19 @@
 </style>
 <body>
     <div id="app">
-        <div class="input-container">
-            <form class="inputArea">
-                <p>ユーザー登録</p>
-                <label>ニックネーム</label>
-                <input v-model="nickname">
-                <label>メールアドレス</label>
-                <input v-model="email">
-            </form>
-            <div class="previewArea">
-                <p>プレビュー</p>
-                <label>ニックネーム</label>
-                <input v-bind:value="nickname" readonly>
-                <label>メールアドレス</label>
-                <input v-bind:value="email" readonly>
-            </div>
-            <div class="buttonArea">
-                <button v-on:click="saveUser">ユーザーを登録する</button>
-            </div>
-        </div>
-        <div>
-            <div class="filterArea">
-                <label>リストをニックネームで絞り込む</label>
-                <input v-model="nicknameFilter">
-            </div>
-        </div>
-        <div>
-            <table>
-                <thead>
-                    <th>ニックネーム</th>
-                    <th>メールアドレス</th>
-                </thead>
-                <tbody>
-                    <tr v-is="'user-row'" v-for="(user, index) in filteredUser" v-bind:user="user" v-bind:key="index">
-                </tbody>
-            </table>
-        </div>
-        <div class="buttonWrapper">
-            <button v-on:click="displayUsers">ユーザーを表示する</button>
-        </div>
+        {{ display }}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@3.0.0/dist/vue.global.js"></script>
     <script>
-        const userRowComponent = Vue.defineComponent({
-            data: function() {
-                return {
-                    editable: false
-                }
-            },
-            methods: {
-                edit: function() {
-                    this.editable = true;
-                    this.$nextTick(() => {
-                        this.$refs.editNickname.focus();
-                    });
-                }
-            },
-            template: `
-                <tr>
-                    <td>
-                        <span v-if="!this.editable" v-on:click="edit()">{{ user.nickname }}</span>
-                        <input v-show="this.editable" v-model="user.nickname" @blur="this.editable = false" ref="editNickname">
-                    </td>
-                    <td>{{ user.email }}</td>
-                </tr>
-            `,
-            props: ['user', 'key'],
-        });
-
         const app = Vue.createApp({
-            components: {
-                'user-row': userRowComponent
+            setup() {
+                const display = Vue.ref('Hello world!')
+
+                return {
+                    display,
+                };
             },
-            data: () => ({
-                users: [],
-                nickname: '',
-                email: '',
-                nicknameFilter: ''
-            }),
-            methods: {
-                saveUser: function() {
-                    let user = {
-                        nickname: this.nickname,
-                        email: this.email
-                    }
-                    this.users.push(user);
-                    alert("ニックネーム: " + this.nickname + "、メールアドレス: " + this.email + 'で登録しました。')
-                },
-                displayUsers: function() {
-                    let message = this.users.length + '人のユーザーが登録されています。';
-                    for(const user of this.users) {
-                        message += '\n' + user.nickname;
-                    }
-                    alert(message);
-                }
-            },
-            computed: {
-                filteredUser: function() {
-                    console.log('called.')
-                    return this.users.filter(user => user.nickname.includes(this.nicknameFilter))
-                }
-            }
-        });
+        }); 
         app.mount("#app")
     </script>
 </body>
