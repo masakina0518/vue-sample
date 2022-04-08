@@ -45,49 +45,83 @@
 </div>
 </template>
 
-<script>
-import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api';
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
 import userRowComponent, { User } from '@/components/UserRow.vue'
 
-export default defineComponent({
-    components: {
-        'user-row': userRowComponent,
-    },
-    setup() {
-        const state = reactive({
-            users: [],
-            nickname: '',
-            email: '',
-            nicknameFilter: '',
-            filteredUsers: computed(() => {
-                return state.users.filter(user => user.nickname.includes(state.nicknameFilter));
-            }),
-        });
+@Component({
+  components: {
+    'user-row': userRowComponent,
+  },
+})
+export default class EditComponent extends Vue {
+  private users: User[] = []
+  private nickname = '';
+  private email = '';
+  private nicknameFilter = '';
 
+  private get filteredUsers() {
+     return this.users.filter(user => user.nickname.includes(this.nicknameFilter));
+  }
 
-        const saveUser = () => {
-            const user = new User(state.nickname, state.email);
-            state.users.push(user);
-
-            alert('ニックネーム: ' + state.nickname + '、メールアドレス: ' + state.email + 'で登録しました。');
-        }
-
-        const displayUsers = () => {
-            let message = state.users.length + ' 人のユーザーが登録されています。';
-            for(const user of state.users) {
-                message += '\n' + user.nickname;
-            }
-            alert(message);
-        }
-
-
-        return {
-            ...toRefs(state),
-            saveUser,
-            displayUsers,
-        }
+  private saveUser() {
+    const user: User = {
+      nickname: this.nickname,
+      email: this.email,
     }
-});
+    this.users.push(user);
+    alert('ニックネーム: ' + this.nickname + '、メールアドレス: ' + this.email + 'で登録しました。');
+  }
+
+  private displayUsers() {
+    let message = this.users.length + ' 人のユーザーが登録されています。';
+    for(const user of this.users) {
+      message += '\n' + user.nickname;
+    }
+    alert(message);
+  }
+}
+
+
+// export default defineComponent({
+//     components: {
+//         'user-row': userRowComponent,
+//     },
+//     setup() {
+//         const state = reactive({
+//             users: [],
+//             nickname: '',
+//             email: '',
+//             nicknameFilter: '',
+//             filteredUsers: computed(() => {
+//                 return state.users.filter(user => user.nickname.includes(state.nicknameFilter));
+//             }),
+//         });
+
+
+//         const saveUser = () => {
+//             const user = new User(state.nickname, state.email);
+//             state.users.push(user);
+
+//             alert('ニックネーム: ' + state.nickname + '、メールアドレス: ' + state.email + 'で登録しました。');
+//         }
+
+//         const displayUsers = () => {
+//             let message = state.users.length + ' 人のユーザーが登録されています。';
+//             for(const user of state.users) {
+//                 message += '\n' + user.nickname;
+//             }
+//             alert(message);
+//         }
+
+
+//         return {
+//             ...toRefs(state),
+//             saveUser,
+//             displayUsers,
+//         }
+//     }
+// });
 </script>
 
 <style module lang="scss">

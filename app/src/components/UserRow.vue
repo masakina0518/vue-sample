@@ -13,39 +13,71 @@
   </tr>
 </template>
 
-<script>
-import { defineComponent, ref, nextTick } from '@vue/composition-api';
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
-export function User(nickname, email) {
-  this.nickname = nickname;
-  this.email = email;
+
+export interface User {
+  nickname: string;
+  email: string;
 }
 
-export default defineComponent({
-  props: {
-    user: {
-      type: User,
-      required: true,
-    }
-  },
-  setup() {
-    const editable = ref(false);
-    const editNickname = ref(null);
-
-    const edit = () => {
-      this.editable = true;
-      nextTick(() => {
-        editNickname.focus();
-      });
-    }
-
-    return {
-      editable,
-      editNickname,
-      edit,
-    };
+const userValidator = (user: User) => {
+  if(!user || !user.nickname || !user.email ) {
+    return false;
   }
-});
+  return true;
+}
+
+@Component
+export default class UserRowComponent extends Vue {
+  @Prop({ required: true, validator: userValidator})
+  private user!: User;
+
+  private editable = false;
+
+  private edit() {
+    this.editable = true;
+    this.$nextTick(() => {
+      (this.$refs.editNickname as HTMLFormElement).focus();
+    })
+  }
+
+}
+
+
+// import { defineComponent, ref, nextTick } from '@vue/composition-api';
+
+// export function User(nickname: any, email: any) {
+//   this.nickname = nickname;
+//   this.email = email;
+// }
+
+// export default defineComponent({
+//   props: {
+//     user: {
+//       type: User,
+//       required: true,
+//     }
+//   },
+//   setup() {
+//     const editable = ref(false);
+//     const editNickname = ref(null);
+
+//     const edit = () => {
+//       this.editable = true;
+//       nextTick(() => {
+//         editNickname.focus();
+//       });
+//     }
+
+//     return {
+//       editable,
+//       editNickname,
+//       edit,
+//     };
+//   }
+// });
 
 </script>
 
