@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lint:scss": "stylelint ./src/**/*.{vue,scss} --fix"
   },
   "dependencies": {
     "@vue/composition-api": "1.0.0",
@@ -52,8 +53,17 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,vue,ts,tsx}": [
-      "vue-cli-service lint",
+    "*.{js,jsx,ts,tsx}": [
+      "npm run lint",
+      "git add"
+    ],
+    "*.{vue}": [
+      "npm run lint",
+      "npm run lint:scss",
+      "git add"
+    ],
+    "*.{scss}": [
+      "npm run lint:scss",
       "git add"
     ]
   }
