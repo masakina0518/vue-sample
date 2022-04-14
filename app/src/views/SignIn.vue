@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>ホーム</h1>
+    <h1>サインイン</h1>
   </div>
 </template>
 

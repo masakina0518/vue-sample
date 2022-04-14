@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>ホーム</h1>
-  </div>
+  <footer />
 </template>
 
 <script lang='ts'>
