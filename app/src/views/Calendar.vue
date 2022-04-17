@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script lang='ts'>
-import { defineComponent } from '@vue/composition-api'
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   props: {
@@ -13,8 +13,8 @@ export default defineComponent({
       required: true,
       validator: (value: string) => {
         return ['month', 'week', 'day'].includes(value);
-      }
-    }
-  }
+      },
+    },
+  },
 });
 </script>

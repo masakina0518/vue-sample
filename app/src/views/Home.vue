@@ -8,8 +8,8 @@
   </div>
 </template>
 
-<script lang='ts'>
-import { defineComponent } from '@vue/composition-api'
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
   setup(prop, context) {
@@ -21,7 +21,6 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
       );
-
     };
     const profile = () => {
       context.root.$router.push(
@@ -31,7 +30,6 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         () => {},
       );
-
     };
     const share = () => {
       context.root.$router.push(

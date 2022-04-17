@@ -6,8 +6,6 @@ import ProfileComponent from '@/views/Profile.vue';
 import ShareComponent from '@/views/Share.vue';
 import SignInComponent from '@/views/SignIn.vue';
 
-
-
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -17,7 +15,7 @@ const routes: Array<RouteConfig> = [
     component: HomeComponent,
     meta: {
       title: 'home',
-    }
+    },
   },
   {
     path: '/calendar/:type',
@@ -55,6 +53,5 @@ router.afterEach((to: any) => {
 
   document.title = to.meta.title;
 });
-
 
 export default router;
