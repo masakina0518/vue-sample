@@ -6,8 +6,6 @@ import ProfileComponent from '@/views/Profile.vue';
 import ShareComponent from '@/views/Share.vue';
 import SignInComponent from '@/views/SignIn.vue';
 
-
-
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
@@ -17,7 +15,7 @@ const routes: Array<RouteConfig> = [
     component: HomeComponent,
     meta: {
       title: 'home',
-    }
+    },
   },
   {
     path: '/calendar/:type',
@@ -47,7 +45,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 router.afterEach((to: any) => {
   if (!to.meta.title) {
     return;
@@ -55,6 +53,5 @@ router.afterEach((to: any) => {
 
   document.title = to.meta.title;
 });
-
 
 export default router;
