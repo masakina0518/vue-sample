@@ -51,8 +51,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from '@vue/composition-api';
-import { profileMockData } from '@/store/profile';
+import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api';
+import { profileStore } from '@/store/profile';
 
 interface MenuItem {
   title: string;
@@ -75,7 +75,9 @@ export default defineComponent({
           methodName: 'share',
         },
       ] as MenuItem[],
-      signInUser: profileMockData,
+      signInUser: computed(() => {
+        return profileStore.profile;
+      }),
     });
 
     /**
@@ -117,6 +119,7 @@ export default defineComponent({
      * サインアウト
      */
     const signOut = () => {
+      profileStore.profile = null;
       routerPush('/sign-in');
     };
 
