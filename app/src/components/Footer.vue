@@ -21,7 +21,7 @@
         <template v-slot:activator="{ on }">
           <div :class="$style.profile" class="py-1 px-1 text-center" v-on="on">
             <v-avatar :color="signInUser.themeColor">
-              <span class="white--text body-2" v-text="signInUser.nickname" />
+              <span class="white--text body-2" v-text="signInUser.nickName" />
             </v-avatar>
           </div>
         </template>
