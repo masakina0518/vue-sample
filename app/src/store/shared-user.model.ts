@@ -1,7 +1,7 @@
 export interface SharedUser {
     userId: string;
     userName: string;
-    nickname: string;
+    nickName: string;
     themeColor: string;
     hasAvatar: boolean;
     display: boolean;

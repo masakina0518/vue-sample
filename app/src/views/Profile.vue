@@ -109,7 +109,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api';
-import { profileStore } from '@/store/profile';
+import {
+  profileStore,
+  updateThemeColor,
+  updateUserName,
+  updateNickName,
+} from '@/store/profile';
 
 export default defineComponent({
   setup() {
@@ -133,8 +138,7 @@ export default defineComponent({
      * テーマカラーを保存します
      */
     const saveThemeColor = () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      profileStore.profile!.themeColor = state.newThemeColor;
+      updateThemeColor(state.newThemeColor);
     };
     /**
      * ユーザー名の編集を開始します。
@@ -154,8 +158,7 @@ export default defineComponent({
      */
     const saveUserName = () => {
       if (state.newUserName) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        profileStore.profile!.userName = state.newUserName;
+        updateUserName(state.newUserName);
       }
       state.isOpenEditUserNameDialog = false;
     };
@@ -177,8 +180,7 @@ export default defineComponent({
      */
     const saveNickName = () => {
       if (state.newNickName) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        profileStore.profile!.nickName = state.newNickName;
+        updateNickName(state.newNickName);
       }
       state.isOpenEditNickNameDialog = false;
     };
