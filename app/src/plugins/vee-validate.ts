@@ -12,7 +12,7 @@ import { required, max, ext, size } from 'vee-validate/dist/rules';
 // 設定
 const config = {
   bails: false,
-  mode: 'aggressive',
+  mode: 'eager',
 };
 configure(config);
 extend('required', required);

@@ -47,7 +47,7 @@
         open-on-hover
       >
         <v-card>
-          <ValidationObserver v-slot="{ invalid }">
+          <ValidationObserver ref="userNameValidationObserver">
             <ValidationProvider
               v-slot="{ errors }"
               name="ユーザー名"
@@ -78,7 +78,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                :disabled="invalid"
+                :disabled="userNameSaveDisabled"
                 @click="saveUserName"
               >
                 保存する
@@ -101,7 +101,7 @@
         open-on-hover
       >
         <v-card>
-          <ValidationObserver v-slot="{ invalid }">
+          <ValidationObserver ref="nicknameValidationObserver">
             <ValidationProvider
               v-slot="{ errors }"
               name="ニックネーム"
@@ -132,7 +132,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                :disabled="invalid"
+                :disabled="nicknameSaveDisabled"
                 @click="saveNickName"
               >
                 保存
@@ -159,6 +159,8 @@ import {
   reactive,
   toRefs,
   computed,
+  watch,
+  nextTick,
 } from '@vue/composition-api';
 import {
   profileStore,
@@ -166,7 +168,7 @@ import {
   updateUserName,
   updateNickName,
 } from '@/store/profile';
-import { validate } from 'vee-validate';
+import { validate, ValidationObserver } from 'vee-validate';
 
 export default defineComponent({
   setup() {
@@ -198,6 +200,15 @@ export default defineComponent({
       }),
       // アバターのバリデーションエラー
       avatarErrors: null as string[] | null,
+      userNameValidationObserver: null as InstanceType<
+        typeof ValidationObserver
+      > | null,
+      nicknameValidationObserver: null as InstanceType<
+        typeof ValidationObserver
+      > | null,
+      // 保存が無効であるかを示すフラグ
+      userNameSaveDisabled: false,
+      nicknameSaveDisabled: false,
     });
     /**
      * アバターを保存します。
@@ -206,21 +217,19 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
     const saveFileContent = (file: File) => {
       state.avatarErrors = null;
-      console.log(file);
       if (!file) {
         // ファイル選択がなければ何もしない
+        return;
       }
 
       validate(file, state.validationRoules.avatar, {
         name: 'アバター',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }).then((result: any) => {
-        console.log(typeof result);
         if (!result.valid) {
           state.avatarErrors = result.errors;
           return;
         }
-        // バリデーション成功。　WebAPIを呼び出しアバター画像を保存する
       });
     };
     /**
@@ -273,6 +282,36 @@ export default defineComponent({
       }
       state.isOpenEditNickNameDialog = false;
     };
+
+    watch(
+      () => state.newUserName,
+      () => {
+        nextTick(() => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          state
+            .userNameValidationObserver!.validate({ silent: true })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .then((result: any) => {
+              state.userNameSaveDisabled = !result;
+            });
+        });
+      },
+    );
+
+    watch(
+      () => state.newNickName,
+      () => {
+        nextTick(() => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          state
+            .nicknameValidationObserver!.validate({ silent: true })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .then((result: any) => {
+              state.nicknameSaveDisabled = !result;
+            });
+        });
+      },
+    );
 
     return {
       ...toRefs(state),
