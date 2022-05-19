@@ -7,7 +7,7 @@ import {
   ValidationProvider,
 } from 'vee-validate';
 import ja from 'vee-validate/dist/locale/ja';
-import { required, max } from 'vee-validate/dist/rules';
+import { required, max, ext, size } from 'vee-validate/dist/rules';
 
 // 設定
 const config = {
@@ -24,6 +24,8 @@ extend('userNameAllowedCharacters', {
     return /^[0-9A-Z_]*$/i.test(value);
   },
 });
+extend('ext', ext);
+extend('size', size);
 
 // 日本語ローカライズ
 localize('ja', ja);

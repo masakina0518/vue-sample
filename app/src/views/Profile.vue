@@ -16,6 +16,8 @@
             placeholder="画像を選択してください"
             prepend-icon="photo_camera"
             label="アバター"
+            :error-count="Number.MAX_VALUE"
+            :error-messages="avatarErrors"
             @change="saveFileContent"
           />
         </v-col>
@@ -164,6 +166,7 @@ import {
   updateUserName,
   updateNickName,
 } from '@/store/profile';
+import { validate } from 'vee-validate';
 
 export default defineComponent({
   setup() {
@@ -187,15 +190,39 @@ export default defineComponent({
             userNameAllowedCharacters: true,
             max: 15,
           },
+          avatar: {
+            ext: ['png', 'jpeg', 'bmp'],
+            size: 300,
+          },
         };
       }),
+      // アバターのバリデーションエラー
+      avatarErrors: null as string[] | null,
     });
     /**
      * アバターを保存します。
      * @param file アバター画像ファイル
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-    const saveFileContent = (file: File) => {};
+    const saveFileContent = (file: File) => {
+      state.avatarErrors = null;
+      console.log(file);
+      if (!file) {
+        // ファイル選択がなければ何もしない
+      }
+
+      validate(file, state.validationRoules.avatar, {
+        name: 'アバター',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      }).then((result: any) => {
+        console.log(typeof result);
+        if (!result.valid) {
+          state.avatarErrors = result.errors;
+          return;
+        }
+        // バリデーション成功。　WebAPIを呼び出しアバター画像を保存する
+      });
+    };
     /**
      * テーマカラーを保存します
      */
