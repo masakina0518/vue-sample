@@ -77,22 +77,42 @@
         open-on-hover
       >
         <v-card>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-text-field v-model="newNickName" label="ニックネーム*" />
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="blue darken-1" text @click="closeEditNickNameDialog">
-              キャンセル
-            </v-btn>
-            <v-btn color="blue darken-1" text @click="saveNickName">
-              保存
-            </v-btn>
-          </v-card-actions>
+          <ValidationObserver v-slot="{ invalid }">
+            <ValidationProvider
+              v-slot="{ errors }"
+              name="ニックネーム"
+              rules="required|max:15"
+            >
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-text-field
+                      v-model="newNickName"
+                      label="ニックネーム*"
+                      :error-count="Number.MAX_VALUE"
+                      :error-messages="errors"
+                    />
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </ValidationProvider>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="blue darken-1"
+                text
+                @click="closeEditNickNameDialog"
+              >
+                キャンセル
+              </v-btn>
+              <v-btn color="blue darken-1"
+                text
+                :disabled="invalid"
+                @click="saveNickName"
+              >
+                保存
+              </v-btn>
+            </v-card-actions>
+          </ValidationObserver>
         </v-card>
       </v-dialog>
       <v-text-field
