@@ -5,44 +5,69 @@
         サンプルアプリケーションにサインインする
       </p>
       <div>
-        <v-btn width="300" large color="#1DA1F2" class="white--text text-none" @click="signIn">
+        <v-btn
+          width="300"
+          large
+          color="#1DA1F2"
+          class="white--text text-none"
+          @click="signIn"
+        >
           Sing in with SNS1
         </v-btn>
       </div>
 
       <div class="mt-3">
-        <v-btn width="300" large color="#DD2A7B" class="white--text text-none" @click="signIn">
+        <v-btn
+          width="300"
+          large
+          color="#DD2A7B"
+          class="white--text text-none"
+          @click="signIn"
+        >
           Sing in with SNS2
         </v-btn>
       </div>
 
       <div class="mt-3">
-        <v-btn width="300" large color="#3B5998" class="white--text text-none" @click="signIn">
+        <v-btn
+          width="300"
+          large
+          color="#3B5998"
+          class="white--text text-none"
+          @click="signIn"
+        >
           Sing in with SNS3
         </v-btn>
       </div>
-
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { profileStore, profileMockData } from '@/store/profile';
+import { signInAsync } from '@/store/profile';
 
 export default defineComponent({
   setup(prop, context) {
     /**
      * サインイン
      */
-    const signIn = () => {
-      profileStore.profile = profileMockData;
-      context.root.$router.push('/');
+    const signIn = async () => {
+      try {
+        await signInAsync();
+        context.root.$router.push('/');
+      } catch (error) {
+        console.log('error: ', error);
+      }
     };
+    // const signIn = () => {
+    //   profileStore.profile = profileMockData;
+    //   context.root.$router.push('/');
+    // };
 
     return {
       signIn,
-    }
+    };
   },
 });
 </script>
