@@ -12,18 +12,26 @@ import axios from 'axios';
 //   hasAvatar: false,
 //   mailAddress: 'namihei@example.com',
 // };
-  
+
 export const profileStore = reactive({ profile: null as Profile | null });
 
 /**
  * ユーザー名を更新します。
  * @param userName ユーザー名
  */
-export const updateUserName = (userName: string) => {
+export const updateUserNameAsync = async (userName: string) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  profileStore.profile!.userName = userName;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  update(profileStore.profile!);
+  const profile: Profile = profileStore!.profile as Profile;
+  const data = { userName: userName };
+
+  // eslint-disable-next-line no-useless-catch
+  try {
+    await axios.patch('profile', data);
+    profile.userName = userName;
+    update(profile);
+  } catch (error) {
+    throw error;
+  }
 };
 
 /**
@@ -31,10 +39,10 @@ export const updateUserName = (userName: string) => {
  * @param nickName ニックネーム
  */
 export const updateNickName = (nickName: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    profileStore.profile!.nickName = nickName;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    update(profileStore.profile!);  
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  profileStore.profile!.nickName = nickName;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  update(profileStore.profile!);
 };
 
 /**
@@ -45,7 +53,7 @@ export const updateThemeColor = (themeColor: string) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   profileStore.profile!.themeColor = themeColor;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  update(profileStore.profile!);  
+  update(profileStore.profile!);
 };
 
 /**
@@ -60,5 +68,5 @@ export const signInAsync = async () => {
     profileStore.profile = response.data;
   } catch (error) {
     throw error;
-  };
+  }
 };
