@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api';
-import { profileStore } from '@/store/profile';
+import { profileStore } from '@/store/profile/profile';
 
 interface MenuItem {
   title: string;
@@ -76,7 +76,7 @@ export default defineComponent({
         },
       ] as MenuItem[],
       signInUser: computed(() => {
-        return profileStore.profile;
+        return profileStore.getProfile;
       }),
     });
 
@@ -119,7 +119,7 @@ export default defineComponent({
      * サインアウト
      */
     const signOut = () => {
-      profileStore.profile = null;
+      profileStore.clearProfile();
       routerPush('/sign-in');
     };
 

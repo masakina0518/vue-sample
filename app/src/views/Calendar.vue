@@ -316,7 +316,7 @@ import {
 } from '@/store/calendar-event.model';
 import { calendarEventStore, add, update } from '@/store/calendar-event';
 import { sharedUserStore, getThemeColor } from '@/store/shared-user';
-import { profileStore } from '@/store/profile';
+import { profileStore } from '@/store/profile/profile';
 import { SharedUser } from '../store/shared-user.model';
 
 interface VCalendar {
@@ -512,8 +512,9 @@ export default defineComponent({
       // 自分のイベントではないことを判定します。
       isNotOwner: (userId: string) => {
         // 未ログインを考慮する
-        if (!profileStore.profile) return true;
-        return userId !== profileStore.profile.userId;
+        //return userId !== context.root.$store.state.profile.profile.userId;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return userId !== profileStore.profile!.userId;
       },
       // イベントの修正を開始します。
       startEditEvent: () => {
