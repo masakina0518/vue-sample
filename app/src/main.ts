@@ -10,6 +10,15 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import '@/plugins/vee-validate';
 import '@/plugins/axios';
 
+// これはひとつずつ
+// import { myExample } from '@/directives/my-example';
+// Vue.directive('myExample', myExample);
+
+import * as directives from '@/directives';
+for (const [key, directive] of Object.entries(directives)) {
+  console.log(directives, key, directive);
+  Vue.directive(key, directive);
+}
 
 Vue.config.productionTip = false;
 

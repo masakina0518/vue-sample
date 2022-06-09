@@ -47,12 +47,8 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { profileStore } from '@/store/profile/profile';
-import { myExample } from '@/directives/my-example';
 
 export default defineComponent({
-  directives: {
-    myExample,
-  },
   setup(prop, context) {
     const exampleHandler = (event: Event) => {
       console.log(
