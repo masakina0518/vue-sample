@@ -1,9 +1,6 @@
 <template>
   <div>
-    <v-text-field
-      v-model="computedFooValue"
-      v-bind="$attrs"
-    />
+    <v-text-field v-model="computedFooValue" v-bind="$attrs" />
     <v-btn @click="click">click!</v-btn>
   </div>
 </template>
@@ -17,15 +14,15 @@ import {
   PropType,
   onMounted,
 } from '@vue/composition-api';
+import MixinExample from '@/mixins/mixin-example';
 
 export interface MyExampleComponentParameter {
   foo: string;
   bar: string;
 }
 
-
-
 export default defineComponent({
+  mixins: [MixinExample],
   inheritAttrs: true,
   props: {
     value: {
@@ -54,7 +51,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-        console.log('子コンポーネント: mounted');
+      console.log('子コンポーネント: mounted');
     });
 
     return {
@@ -63,5 +60,4 @@ export default defineComponent({
     };
   },
 });
-
 </script>
