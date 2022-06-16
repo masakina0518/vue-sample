@@ -1,7 +1,13 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="12" md="6" class="text-center">
-      <v-text-field v-my-example="exampleHandler" />
+      <!-- <v-text-field v-my-example="exampleHandler" /> -->
+      <my-example
+        v-model="parentValue"
+        counter="10"
+        clearable
+        @custom-event="customEventHandler"
+      />
       <p class="display-1 py-12">
         サンプルアプリケーションにサインインする
       </p>
@@ -45,11 +51,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, reactive, toRefs, onMounted } from '@vue/composition-api';
 import { profileStore } from '@/store/profile/profile';
+import { MyExampleComponentParameter } from '@/components/MyExample.vue';
 
 export default defineComponent({
-  setup(prop, context) {
+  setup(props, context) {
+    console.log('親コンポーネント: created');
+    const state = reactive({
+      parentValue: { foo: 'foo', bar: 'bar' } as MyExampleComponentParameter,
+    });
+
     const exampleHandler = (event: Event) => {
       console.log(
         'event.target.value: ',
@@ -69,9 +81,19 @@ export default defineComponent({
       }
     };
 
+    const customEventHandler = (value: number) => {
+      console.log('value', value);
+    };
+
+    onMounted(() => {
+        console.log('親コンポーネント: mounted');
+    });
+
     return {
       exampleHandler,
       signIn,
+      ...toRefs(state),
+      customEventHandler,
     };
   },
 });

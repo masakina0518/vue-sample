@@ -14,10 +14,16 @@ import '@/plugins/axios';
 // import { myExample } from '@/directives/my-example';
 // Vue.directive('myExample', myExample);
 
+// グローバルディレクティブ
 import * as directives from '@/directives';
 for (const [key, directive] of Object.entries(directives)) {
-  console.log(directives, key, directive);
   Vue.directive(key, directive);
+}
+
+// グローバルコンポーネント
+import * as components from '@/components';
+for (const [key, component] of Object.entries(components)) {
+  Vue.component(key, component);
 }
 
 Vue.config.productionTip = false;

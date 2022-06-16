@@ -3,14 +3,14 @@ import { DirectiveBinding } from 'vue/types/options';
 
 const inserted: DirectiveFunction = (
   el: HTMLElement,
-  binding: DirectiveBinding
+  binding: DirectiveBinding,
 ) => {
   el.addEventListener('input', binding.value);
 };
 
 const unbind: DirectiveFunction = (
   el: HTMLElement,
-  binding: DirectiveBinding
+  binding: DirectiveBinding,
 ) => {
   el.removeEventListener('input', binding.value);
 };
