@@ -61,16 +61,20 @@ import {
 import { parseDate } from 'vuetify/lib/components/VCalendar/util/timestamp';
 import { CalendarTodayEventDetail } from '@/store/calendar-event.model';
 import { todayCalendarEventMockData } from '@/store/calendar-event';
-import { SharedUser } from '@/store/shared-user.model';
 import { sharedUserStore, getThemeColor } from '@/store/shared-user';
+import { userSharedEvents } from '@/modules/user-shared-events'
+
 
 export default defineComponent({
   setup() {
+    // 共通モジュール
+    const { sharedEventState, getDisplayUserIds } = userSharedEvents();
+
     const state = reactive({
       // 本日の日付
       today: parseDate(new Date()),
       // カレンダーを共有しているユーザー
-      sharedUsers: sharedUserStore.sharedUsers,
+      // sharedUsers: sharedUserStore.sharedUsers,
       // 本日の曜日
       displayWeekday: computed((): string => {
         return ['日', '月', '火', '水', '木', '金', '土'][state.today.weekday];
@@ -80,12 +84,8 @@ export default defineComponent({
        * スイッチによってフィルタンリングを行います。
        */
       filteredEvents: computed((): CalendarTodayEventDetail[] => {
-        const displayUserIds = state.sharedUsers
-          .filter((user: SharedUser) => user.display)
-          .map((user: SharedUser) => user.userId);
-
         return todayCalendarEventMockData.filter(
-          event => displayUserIds.includes(event.userId) && !event.startTime,
+          event => getDisplayUserIds().includes(event.userId) && !event.startTime,
         );
       }),
       /**
@@ -93,12 +93,8 @@ export default defineComponent({
        * スイッチによってフィルタンリングを行います。
        */
       filteredEventsHasTime: computed((): CalendarTodayEventDetail[] => {
-        const displayUserIds = state.sharedUsers
-          .filter((user: SharedUser) => user.display)
-          .map((user: SharedUser) => user.userId);
-
         return todayCalendarEventMockData.filter(
-          event => displayUserIds.includes(event.userId) && event.startTime,
+          event => getDisplayUserIds().includes(event.userId) && event.startTime,
         );
       }),
       /**
@@ -120,6 +116,7 @@ export default defineComponent({
     };
 
     return {
+      ...toRefs(sharedEventState),
       ...toRefs(state),
       getEventColor,
     };
