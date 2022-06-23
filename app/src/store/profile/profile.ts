@@ -10,6 +10,13 @@ import axios from 'axios';
 import { Profile } from '@/store/profile.model';
 import { update } from '@/store/shared-user';
 
+/**
+ * sessionStrage にプロフィール情報を保存します。
+ */
+const setStorage = (profile: Profile) => {
+  sessionStorage.setItem('profile', JSON.stringify(profile));
+};
+
 @Module({ name: 'profile', store: store, namespaced: true, dynamic: true })
 class ProfileModule extends VuexModule {
   public profile: Profile | null = null;
@@ -18,7 +25,14 @@ class ProfileModule extends VuexModule {
    * プロフィール取得
    */
   public get getProfile() {
-    return this.profile;
+    if (this.profile) {
+      return this.profile;
+    };
+    const profile = sessionStorage.getItem('profile');
+    if (profile) {
+      return JSON.parse(profile) as Profile;
+    };
+    return null;
   }
 
   /**
@@ -27,7 +41,9 @@ class ProfileModule extends VuexModule {
   @Mutation
   private updateUserName(userName: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.profile!.userName = userName;
+    const profile = this.profile!;
+    profile.userName = userName;
+    setStorage(profile);
   }
 
   /**
@@ -36,7 +52,9 @@ class ProfileModule extends VuexModule {
   @Mutation
   private updateNickname(nickname: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.profile!.nickName = nickname;
+    const profile = this.profile!;
+    profile.nickName = nickname;
+    setStorage(profile);
   }
  
   /**
@@ -45,7 +63,9 @@ class ProfileModule extends VuexModule {
   @Mutation
   private updateThemeColor(themeColor: string) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.profile!.themeColor = themeColor;
+    const profile = this.profile!;
+    profile.themeColor = themeColor;
+    setStorage(profile);
   }
   /**
    * プロフィールをStateに保存
@@ -53,6 +73,7 @@ class ProfileModule extends VuexModule {
    @Mutation
    private saveProfile(profile: Profile) {
      this.profile = profile;
+     setStorage(profile);
    }
    
   /**
@@ -61,6 +82,7 @@ class ProfileModule extends VuexModule {
   @Mutation
   public clearProfile() {
     this.profile = null;
+    sessionStorage.removeItem('profile');
   }
 
 
