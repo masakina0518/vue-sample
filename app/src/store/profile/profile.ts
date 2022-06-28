@@ -145,7 +145,7 @@ class ProfileModule extends VuexModule {
    * サインアウトします。
    */
   @Action
-  private async signOut() {
+  public async signOut() {
     // eslint-disable-next-line no-useless-catch
     try {
       //サインアウト関連実装
