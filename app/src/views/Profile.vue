@@ -257,6 +257,9 @@ export default defineComponent({
         }
         state.isOpenEditUserNameDialog = false;
       } catch (error) {
+        if (error?.response?.status === 422) {
+          context.root.$toast(error.response?.data?.title);
+        }
         console.log('error: ', error.response?.data?.title);
       }
     };
